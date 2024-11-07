@@ -1,2 +1,8 @@
 # Virtual Environment
 .fashion-mnist
+
+# Data
+data
+
+# Pthon cache
+__pycache__
