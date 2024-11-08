@@ -3,9 +3,9 @@ import torch
 
 import matplotlib.pyplot as plt
 
-from typing import List
+from typing import List, Tuple
 
-def random_data_visual(dataset: torch.utils.data.Dataset,
+def random_data_visual(dataset: torch.utils.data.Dataset[Tuple[torch.Tensor, int]],
                        class_names: List) -> None:
     """
     A function to visualize random 9 datapoints from the FashionMNIST library.
