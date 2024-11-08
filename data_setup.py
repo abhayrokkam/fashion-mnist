@@ -44,7 +44,7 @@ def get_datasets(root: str | Path) -> Tuple[torch.utils.data.Dataset, torch.util
     
     return train_data, test_data
 
-def get_classes(dataset: torch.utils.data.Dataset) -> List[str]:
+def get_class_names(dataset: torch.utils.data.Dataset) -> List[str]:
     """
     A funciton to return the classes of a dataset.
     """
