@@ -25,6 +25,7 @@ class LinearFmnist(torch.nn.Module):
         super().__init__()
         
         self.sequence = torch.nn.Sequential(
+            torch.nn.Flatten(),
             torch.nn.Linear(in_features=input_units,
                             out_features=hidden_units),
             torch.nn.Linear(in_features=hidden_units,
@@ -64,6 +65,7 @@ class NonLinearFmnist(torch.nn.Module):
         super().__init__()
         
         self.sequence = torch.nn.Sequential(
+            torch.nn.Flatten(),
             torch.nn.Linear(in_features=input_units,
                             out_features=hidden_units),
             torch.nn.ReLU(),
