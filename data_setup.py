@@ -56,7 +56,7 @@ def get_dataloaders(batch_size: int,
                                   num_workers=num_workers)
 
     test_dataloader = DataLoader(dataset=test_data,
-                                 batch_size=batch_size * 2,
+                                 batch_size=batch_size,
                                  shuffle=True,
                                  num_workers=num_workers)
     

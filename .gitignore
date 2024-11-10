@@ -4,5 +4,11 @@
 # Data
 data
 
+# Models
+models
+
+# Training Output
+training_out.txt
+
 # Cache
 __pycache__

@@ -6,6 +6,8 @@ import data_setup, model_builder, engine, utils
 
 def main():
     # Hyperparameters
+    EPOCHS = 15
+    LEARNING_RATE = 0.001
     BATCH_SIZE = 32
     NUM_WORKERS = 4
     
@@ -34,7 +36,9 @@ def main():
     
     model_convolutional = model_builder.ConvolutionFmnist(in_channels=1,
                                                           out_features=len(class_names),
-                                                          hidden_channels=15)
+                                                          hidden_channels=15,
+                                                          image_height=28,
+                                                          image_width=28)
     
     # Adding the models to the list
     models.append(model_linear)
@@ -47,12 +51,13 @@ def main():
     
     for model in models:
         optimizer = torch.optim.SGD(params=model.parameters(),
-                                   lr = 0.001)
+                                   lr = LEARNING_RATE)
         optimizers.append(optimizer)
     
     # Training the models
     for model, optimizer in zip(models, optimizers):
-        result = engine.train(epochs = 10,
+        print(f"\n\n/////////////////////////////////////////// Training: {model.__class__.__name__} ///////////////////////////////////////////\n")
+        result = engine.train(epochs = EPOCHS,
                               model=model,
                               train_dataloader=train_dataloader,
                               test_dataloader=test_dataloader,
@@ -63,3 +68,21 @@ def main():
         
         # Appending the training result in results list
         results.append(result)
+        
+        # Cuda memeory management
+        del model                   # Deleting the model from the memory
+        torch.cuda.empty_cache()    # Emptying cuda cache
+    
+    # Saving the models
+    for model in models:
+        utils.save_model(model=model,
+                         model_name=f'{model.__class__.__name__}_{str(EPOCHS)}E_{str(LEARNING_RATE)}LR.pth')
+    
+    # Saving the loss curves
+    for result, model in zip(results, models):
+        utils.plot_save_loss_curves(results=result,
+                                    model_name=f'{model.__class__.__name__}')
+
+if __name__ == '__main__':
+    main()
+    

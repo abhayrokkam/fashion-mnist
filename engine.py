@@ -51,7 +51,7 @@ def train_epoch(model: torch.nn.Module,
     # Average the loss
     train_loss /= len(dataloader)
     
-    return {'train_loss': train_loss}
+    return {'train_loss': train_loss.item()}
 
 def test_epoch(model: torch.nn.Module,
                dataloader: torch.utils.data.DataLoader,
@@ -82,6 +82,9 @@ def test_epoch(model: torch.nn.Module,
     # Move the model to the device
     model = model.to(device)
     
+    # Moving the accuracy function to device
+    accuracy_function = accuracy_function.to(device)
+    
     # Tracking variables
     test_loss = 0
     test_accuracy = 0
@@ -95,7 +98,7 @@ def test_epoch(model: torch.nn.Module,
         loss = loss_funciton(y_pred, y)
         
         # Calculate the accuracy
-        accuracy += accuracy_function(torch.argmax(y_pred, dim=1).squeeze(), y)
+        accuracy = accuracy_function(torch.argmax(y_pred, dim=1).squeeze(), y)
         
         # Adding the tracking values
         test_loss += loss
@@ -105,8 +108,8 @@ def test_epoch(model: torch.nn.Module,
     test_loss /= len(dataloader)
     test_accuracy /= len(dataloader)
     
-    return {'test_loss': test_loss,
-            'test_accuracy': test_accuracy}
+    return {'test_loss': test_loss.item(),
+            'test_accuracy': test_accuracy.item()}
 
 def train(epochs: int,
           model: torch.nn.Module,
@@ -161,6 +164,8 @@ def train(epochs: int,
         train_loss.append(train_result['train_loss'])
         test_loss.append(test_result['test_loss'])
         test_accuracy.append(test_result['test_accuracy'])
+        
+        print(f"Epoch: {epoch}  |  Loss: {train_result['train_loss']:.2f}  |  Test Loss: {test_result['test_loss']:.2f}  |  Test Accuracy: {test_result['test_accuracy']:.2f}")
         
     return {'train_loss': train_loss,
             'test_loss': test_loss,
